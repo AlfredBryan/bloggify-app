@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial;
+    background-color: #f5e8e8;
+  }
+  
+  .leftcolumn {   
+    float: left;
+    width: 75%;
+  }
+  .rightcolumn {
+    float: left;
+    width: 25%;
+    padding-left: 20px;
+  }
+  .fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .card {
+     background-color: white;
+     padding: 20px;
+     margin-top: 20px;
+  }
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  @media screen and (max-width: 800px) {
+    .leftcolumn, .rightcolumn {   
+        width: 100%;
+        padding: 0;
+    }
+  }
+  .author {
+    font-family: 'Great Vibes', cursive;
+    font-weight: 700;
+  }
+  .post {
+    font-family: 'Cormorant Garamond', serif;
+  }
+  
+  .title {
+    font-family: 'Philosopher', sans-serif;
+    color: #301862;
+  }

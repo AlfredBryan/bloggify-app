@@ -1,0 +1,22 @@
+.affix {
+  top: 0;
+  width: 100%;
+  z-index: 9999 !important;
+}
+
+.affix + .container-fluid {
+  padding-top: 70px;
+}
+
+.navbar {
+  background-color: aliceblue;
+}
+.nav a {
+  color: #301862;
+  margin-left: 50px;
+  font-size: 25px;
+  font-family: "Teko", sans-serif;
+}
+.nav span {
+  color: black;
+}

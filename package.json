@@ -1,0 +1,25 @@
+{
+  "name": "bloggify",
+  "version": "1.0.0",
+  "description": "A blog built with nodejs and reactjs",
+  "main": "server.js",
+  "scripts": {
+    "heroku-postbuild": "cd client && npm --production=false && npm run build",
+    "start": "nodemon server.js",
+    "dev": "concurrently \"nodemon server.js\" \"cd client && npm start\""
+  },
+  "author": "Alfred Chimereze Bryan",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.0.1",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.3.6",
+    "mongoose-unique-validator": "^2.0.2",
+    "multer": "^1.4.1",
+    "nodemon": "^1.18.4"
+  }
+}
