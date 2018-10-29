@@ -40,3 +40,14 @@ input[type="submit"]:hover {
   margin-bottom: 20px;
   font-weight: 800;
 }
+@media screen and (max-width: 800px) {
+  
+ .rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+  .container-form {
+    margin-left: 0;
+    width: 100%;
+  }
+}

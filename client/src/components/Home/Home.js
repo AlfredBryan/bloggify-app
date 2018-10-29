@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment/moment.js";
+import superagent from "superagent";
 import "./Home.css";
 
 import Footer from "../Footer/Footer";
@@ -12,7 +13,10 @@ class Home extends Component {
       posts: [],
       postId: this.props.match.params.id,
       Like: "",
-      Unlike: ""
+      Unlike: "",
+      name: "",
+      email: "",
+      message: ""
     };
   }
 
@@ -21,6 +25,32 @@ class Home extends Component {
       .then(res => res.json())
       .then(posts => this.setState({ posts }, () => console.log(posts)));
   }
+
+  sendMail = e => {
+    e.preventDefault();
+    superagent
+      .post("/mail")
+      .send({
+        name: this.state.name,
+        email: this.state.email,
+        message: this.state.message
+      })
+      .end((error, response) => {
+        console.log(response);
+        if (error) {
+          alert("Message not sent");
+        } else {
+          alert("Message sent");
+        }
+      });
+  };
+
+  handleChange = e => {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   render() {
     return (
@@ -75,6 +105,41 @@ class Home extends Component {
                 <div className="fakeimg">Image</div>
                 <br />
                 <div className="fakeimg">Image</div>
+              </div>
+              <div className="card">
+                <form onSubmit={this.sendMail}>
+                  <label for="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Your name.."
+                    onChange={this.handleChange}
+                    value={this.state.name}
+                  />
+
+                  <label for="lname">Email</label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    placeholder="Enter last email.."
+                    onChange={this.handleChange}
+                    value={this.state.email}
+                  />
+
+                  <label for="message">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={this.state.message}
+                    placeholder="Enter message.."
+                    style={{ height: "200px" }}
+                    onChange={this.handleChange}
+                  />
+
+                  <input type="submit" value="Submit" />
+                </form>
               </div>
               <div className="card">
                 <h3 className="title">Follow Me</h3>

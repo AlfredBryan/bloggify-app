@@ -9,18 +9,16 @@ class CustomNavbar extends Component {
         <div
           class="container-fluid"
           style={{
-            backgroundColor: "#F46036",
+            backgroundColor: "white",
             color: "black",
             height: "150px"
           }}
         >
           <img
-            src={require("../images/fullsizeoutput_40.jpeg")}
+            src={require("../images/bloggify.png")}
             style={{
               height: "150px",
-              width: "120px",
-              borderRadius: "100px",
-              border: "1px solid black"
+              width: "200px",
             }}
             alt="logo"
           />
@@ -47,10 +45,10 @@ class CustomNavbar extends Component {
               </Link>
             </li>
             <li>
-              <a href="#">
+              <Link to="/register">
                 <span class="glyphicon glyphicon-user" />
                 JOIN
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

@@ -1,5 +1,6 @@
 footer {
     flex-shrink: 0;
+    margin-top: 40px;
   }
   footer.nb-footer {
     background: #222;

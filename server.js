@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 
 const config = require("./config");
 const userRoutes = require("./routes/UserRoutes");
@@ -44,12 +45,35 @@ function checkFileType(file, cb) {
   }
 }
 
+// Mail Services
+const transport = {
+  host: "smtp.gmail.com",
+  auth: {
+    user: config.USER,
+    pass: config.PASSWORD
+  }
+};
+
+const transporter = nodemailer.createTransport(transport);
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Server is ready to take messages");
+  }
+});
+
 const app = express();
 
 app.use(express.static("./public"));
 
 // Setting Headers
 app.use(cors());
+
+// Adding the body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Upload route
 app.post("/upload", (req, res) => {
@@ -63,9 +87,32 @@ app.post("/upload", (req, res) => {
   });
 });
 
-// Adding the body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Mail routes
+app.post("/mail", (req, res) => {
+
+  const mail = {
+    from: req.body.name,
+    to: 'alfred.chimereze@gmail.com',
+    subject: 'Mail from Bloggify Contact',
+    text: req.body.name + '\n' +
+        req.body.email + '\n\n' +
+        req.body.message
+};
+
+  transporter.sendMail(mail, (error, data) => {
+    if (error) {
+      res.json({
+        msg: "failed"
+      });
+    } else {
+      res.json({
+        msg: "success"
+      });
+    }
+  });
+});
+
+
 
 // Adding the routes
 app.use("/api", userRoutes);

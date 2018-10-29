@@ -13,31 +13,7 @@
   font-weight: 700;
   font-size: 20px;
 }
-@media only screen and (max-width: 400px) {
-  /* For mobile phones: */
-  .detailBox {
-    max-width: 600px;
-    margin: 20px;
-    margin-left: 0px;
-  }
-  #comment {
-    z-index: 100;
-    max-width: 200px;
-    margin-left: 10px;
-  }
-  #profpicture {
-    max-width: 30px;
-    max-height: 30px;
-    border-radius: 10px;
-  }
-  #send {
-    height: 30px;
-    max-width: 30px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border-radius: 20px;
-  }
-}
+
 .comment-style {
   position: absolute;
   margin-left: -28px;
@@ -747,5 +723,46 @@
   font-size: 16px;
   font-weight: 600;
 }
-
+@media screen and (max-width: 800px) {
+  .detailBox {
+    width: 100%;
+    margin-left: 0;
+  }
+  .comment-style {
+    margin-left: 0;
+    width: 100%;
+  }
+  #alsopost {
+    margin-left: 120px;
+    font-size: 12px;
+    margin-top: 19px;
+  }
+  #commentsystem {
+    margin-left: 0;
+    width: 100%;
+  }
+  .facebook {
+    width: 500px;
+    margin-left: -12px;
+    margin-top: -67px;
+  }
+#comment {
+  padding: 13px 17px;
+  width: 300px;
+  margin-left: 60px;
+  display: block;
+  border-radius: 25px;
+  outline: none;
+  border: 1px solid #bec2c9;
+}
+#send {
+  width: 80px;
+  line-height: 20px;
+  margin-left: 270px;
+  margin-top: 10px;
+}
+body{
+  width: 100%;
+}
+}
 

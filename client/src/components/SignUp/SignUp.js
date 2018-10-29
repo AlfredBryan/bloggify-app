@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import superagent from "superagent";
+import PasswordMask from "react-password-mask";
 import "./SignUp.css";
 
 import Footer from "../Footer/Footer";
@@ -153,7 +154,7 @@ class SignUp extends Component {
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
                     </span>
-                    <input
+                    <PasswordMask
                       type="password"
                       className="form-control"
                       name="password"
@@ -167,7 +168,6 @@ class SignUp extends Component {
                 <button type="submit" onClick={this.signUp} className="signup">
                   SUBMIT
                 </button>
-                <p>{this.state.errorMessage}</p>
               </form>
             </div>
           </div>
