@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import superagent from "superagent";
 import { Redirect } from "react-router-dom";
+import { Helmet } from "react-helmet"
 
 import Footer from "../Footer/Footer";
 
@@ -47,6 +48,9 @@ class Blog extends Component {
 
     return (
       <div>
+        <Helmet>
+          <title>Create Post</title>
+        </Helmet>
         <div className="container-form">
           <h3>Post</h3>
           <form

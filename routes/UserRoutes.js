@@ -11,6 +11,13 @@ router.get("/users", (req, res) => {
   res.send("Get Post");
 });
 
+
+router.get("/user/:id", (req, res) => {
+  User.findOne({ _id: req.params.id }).then(user => {
+    res.send(user);
+  });
+});
+
 router.post("/users/signup", (req, res) => {
   const hashPassword = bcrypt.hashSync(req.body.password, 10);
   User.create(
@@ -29,7 +36,7 @@ router.post("/users/signup", (req, res) => {
       const token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: 5000
       });
-      res.status(201).send({token: token});
+      res.status(201).send({ token: token });
     }
   );
 });

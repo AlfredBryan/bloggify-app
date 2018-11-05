@@ -4,7 +4,6 @@ const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
-
 // Getting All Post
 router.get("/post", (req, res) => {
   Post.find({}, (err, posts) => {
@@ -23,7 +22,7 @@ router.post("/post", (req, res) => {
       author: req.body.author,
       title: req.body.title,
       post: req.body.post,
-      likes: req.body.likes
+      likes_count: req.body.likes_count
     },
     (err, post) => {
       if (err) return res.status(505).send(err);
@@ -54,6 +53,22 @@ router.post("/post/:id", (req, res) => {
     comment.save(error => {
       if (error) return res.send(error);
     });
+    post.save((error, post) => {
+      if (error) return res.send(error);
+      res.send(post);
+    });
+  });
+});
+
+// Adding or Removing A Like to A single Post
+router.post("/post/:id/like", (req, res) => {
+  Post.findOne({ _id: req.params.id }).then(post => {
+    if (req.body.like_type == "increment"){
+      post.likes_count += 1
+    } 
+    if (req.body.like_type == "decrement"){
+      post.likes_count -= 1
+    } 
     post.save((error, post) => {
       if (error) return res.send(error);
       res.send(post);

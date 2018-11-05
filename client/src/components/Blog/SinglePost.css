@@ -3,9 +3,8 @@
 .detailBox {
   max-width: 700px;
   border: 1px solid #bbb;
-  margin: 50px;
+  margin: 0 auto;
   background-color: wheat;
-  margin-left: 150px;
 }
 .taskDescription {
   color: #4267b2;
@@ -13,7 +12,9 @@
   font-weight: 700;
   font-size: 20px;
 }
-
+.main-comment {
+  padding:50px;
+}
 .comment-style {
   position: absolute;
   margin-left: -28px;
@@ -725,15 +726,16 @@
 }
 @media screen and (max-width: 800px) {
   .detailBox {
-    width: 100%;
-    margin-left: 0;
+    width: 370px;
+  }
+  .main-comment {
+    padding:0;
   }
   .comment-style {
     margin-left: 0;
     width: 100%;
   }
   #alsopost {
-    margin-left: 120px;
     font-size: 12px;
     margin-top: 19px;
   }
@@ -746,23 +748,42 @@
     margin-left: -12px;
     margin-top: -67px;
   }
-#comment {
-  padding: 13px 17px;
-  width: 300px;
-  margin-left: 60px;
-  display: block;
-  border-radius: 25px;
-  outline: none;
-  border: 1px solid #bec2c9;
-}
-#send {
-  width: 80px;
-  line-height: 20px;
-  margin-left: 270px;
-  margin-top: 10px;
-}
-body{
-  width: 100%;
-}
+  #comment {
+    padding: 13px 17px;
+    width: 300px;
+    margin-left: 60px;
+    display: block;
+    border-radius: 25px;
+    outline: none;
+    border: 1px solid #bec2c9;
+  }
+  #send {
+    width: 80px;
+    line-height: 20px;
+    margin-left: 270px;
+    margin-top: 10px;
+  }
+  body {
+    width: 100%;
+  }
 }
 
+#like-handler {
+  cursor: pointer;
+}
+.votes {
+  display: flex;
+}
+.vote {
+  margin-top: 28px;
+  font-size: 20px;
+  color: #365899;
+  font-family: "Merriweather", serif;
+}
+.vote-click {
+  margin-left: 20px;
+}
+.amount {
+  margin-left: 6px;
+  font-weight: 500;
+}

@@ -7,6 +7,7 @@
     "moment": "^2.22.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
+    "react-helmet": "^5.2.0",
     "react-password-mask": "^3.3.1",
     "react-password-strength": "^2.3.1",
     "react-password-strength-indicator": "^1.0.0",

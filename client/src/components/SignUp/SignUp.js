@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import superagent from "superagent";
 import PasswordMask from "react-password-mask";
+import { Helmet } from "react-helmet";
+import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./SignUp.css";
 
 import Footer from "../Footer/Footer";
@@ -46,16 +49,20 @@ class SignUp extends Component {
         }
         if (response.ok) {
           this.setState({ loading: true });
-          alert("SignUp Successful");
           return;
         }
-        window.localStorage.setItem("token", response.body.token);
       });
   };
 
   render() {
+    if (this.state.loading) {
+      return <Redirect to={"/signin"} />;
+    }
     return (
       <div>
+        <Helmet>
+          <title>Join Bloggify</title>
+        </Helmet>
         <div className="container">
           <div className="main">
             <div className="main-center">
@@ -164,10 +171,25 @@ class SignUp extends Component {
                     />
                   </div>
                 </div>
+                <div className="register-bottom">
+                  <div className="btn-2">
+                    <button
+                      type="submit"
+                      onClick={this.signUp}
+                      className="signup"
+                    >
+                      SUBMIT
+                    </button>
+                  </div>
+                   <div className="btn-1">
+                   <Link to="/signin">
+                    <button  className="btn-success">
+                      LOGIN
+                    </button>
+                  </Link>
+                   </div>
 
-                <button type="submit" onClick={this.signUp} className="signup">
-                  SUBMIT
-                </button>
+                </div>
               </form>
             </div>
           </div>

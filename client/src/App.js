@@ -4,9 +4,10 @@ import CustomNavbar from "./components/Navbar/CustomNavbar";
 import Home from "./components/Home/Home";
 import SinglePost from "./components/Blog/SinglePost";
 import Blog from "./components/Post/Blog";
-import Comment from "./components/comments/Comment";
 import SignUp from "./components/SignUp/SignUp";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import Dashboard from "./components/UserDasboard/Dashboard";
+import Login from "./components/UserLogin/Login";
 
 class App extends Component {
   render() {
@@ -18,8 +19,9 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/register" component={SignUp} />
             <Route path="/addblog" component={Blog} />
-            <Route path="/comments" component={Comment} />
             <Route path="/post/:id" component={SinglePost} />
+            <Route path="/userdashboard" component={Dashboard} />
+            <Route path="/signin" component={Login} />
           </div>
         </Router>
       </div>

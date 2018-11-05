@@ -14,7 +14,11 @@ const PostSchema = new Schema({
     type: String,
     required: [true, "enter post field"]
   },
-  likes_count: Number,
+  likes_count: {
+    type: Number,
+    default: 0
+
+  },
   comments: [
     {
       type: Schema.Types.ObjectId,
@@ -23,7 +27,7 @@ const PostSchema = new Schema({
   ],
 
   date: { type: Date, default: Date.now }
-});
+}, { strict: false});
 
 const Post = mongoose.model("Post", PostSchema);
 

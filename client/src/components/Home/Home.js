@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment/moment.js";
 import superagent from "superagent";
+import { Helmet }  from "react-helmet";
 import "./Home.css";
 
 import Footer from "../Footer/Footer";
@@ -55,6 +56,9 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Bloggify Posts</title>
+        </Helmet>
         <div className="container">
           <div className="row">
             <div className="leftcolumn">
@@ -69,6 +73,7 @@ class Home extends Component {
                   </div>
                   <p className="author">{post.author}</p>
                   <p className="post">{post.post}</p>
+                  <div className="bottom-line">
                   <div className="read">
                     <p>
                       <Link to={`/post/${post._id}`}>
@@ -78,6 +83,16 @@ class Home extends Component {
                       </Link>
                     </p>
                   </div>
+                    <div className="vote-area">
+                      <div className="post-votes">
+                      <span class="glyphicon glyphicon-heart"
+                      ></span></div>
+                      <div className="vote-display">
+                        {post.likes_count}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               ))}
             </div>

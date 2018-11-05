@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import superagent from "superagent";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 import "./SinglePost.css";
 
 import Footer from "../Footer/Footer";
@@ -13,8 +14,7 @@ class SinglePost extends Component {
       post: "",
       comments: [],
       comment: "",
-      likes: 0,
-      dislikes: 0
+      like_type: ""
     };
   }
 
@@ -37,18 +37,31 @@ class SinglePost extends Component {
           alert("Add comment Successful");
         }
       });
+    this.forceUpdate();
+  };
+
+  postLike = like_type => {
+    const id = this.props.match.params.id;
+    superagent
+      .post(`/api/post/${id}/like`)
+      .send({ like_type: like_type })
+      .end((error, response) => {
+        if (error) {
+          alert("Add like failed");
+        } else {
+          alert("Add like Successful");
+        }
+      });
   };
 
   likesHandleClick = () => {
-    this.setState({
-      likes: this.state.likes + 1
-    });
+    this.postLike("increment");
+    this.forceUpdate();
   };
 
   dislikesHandleClick = () => {
-    this.setState({
-      dislikes: this.state.dislikes + 1
-    });
+    this.postLike("decrement");
+    this.forceUpdate();
   };
 
   handleChange = e => {
@@ -82,6 +95,10 @@ class SinglePost extends Component {
     if (this.state.post || this.state.comments) {
       return (
         <div>
+          <Helmet>
+            <title>Post Comments</title>
+          </Helmet>
+        <div className="main-comment">
           <div className="detailBox">
             <div className="titleBox">
               <label>{this.state.post.title}</label>
@@ -91,29 +108,27 @@ class SinglePost extends Component {
             </div>
             <div className="commentBox">
               <p className="taskDescription">{this.state.post.post}</p>
-              <div>
-                <strong> Like</strong>
-                <button
-                  onClick={this.likesHandleClick}
-                  style={{ color: "blue", fontWeight: 700 }}
-                >
-                  {this.state.likes}
+              <div className="votes">
+              <div className="vote"><strong>vote</strong></div>
+                <div className="vote-click">
+                <p>
                   <span
-                    className="glyphicon glyphicon-thumbs-up"
-                    style={{ padding: "3px" }}
+                    className="glyphicon glyphicon-menu-up"
+                    style={{ padding: "4px",fontWeight:600 }}
+                    onClick={this.likesHandleClick}
+                    id="like-handler"
                   />
-                </button>
-                <strong>Dislike</strong>
-                <button
-                  onClick={this.dislikesHandleClick}
-                  style={{ color: "blue", fontWeight: 700 }}
-                >
-                  {this.state.dislikes}
+                </p>
+                <p className="amount">{this.state.post.likes_count}</p>
+                <p>
                   <span
-                    className="glyphicon glyphicon-thumbs-down"
-                    style={{ padding: "3px" }}
+                    className="glyphicon glyphicon-menu-down"
+                    style={{ padding: "4px", fontWeight:600  }}
+                    onClick={this.dislikesHandleClick}
+                    id="like-handler"
                   />
-                </button>
+                </p>
+                </div>
               </div>
             </div>
             <div className="actionBox">
@@ -188,6 +203,7 @@ class SinglePost extends Component {
                 ))}
               </div>
             </div>
+          </div>
           </div>
           <div className="footer">
             <Footer />

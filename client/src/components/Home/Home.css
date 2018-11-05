@@ -39,6 +39,7 @@ body {
     width: 100%;
     padding: 0;
   }
+  
 }
 .author {
   font-family: "Great Vibes", cursive;
@@ -51,4 +52,24 @@ body {
 .title {
   font-family: "Philosopher", sans-serif;
   color: #301862;
+}
+.bottom-line {
+  display: flex;
+}
+.read {
+  flex: 6;
+}
+.vote-area {
+  flex: 1;
+  display: flex;
+}
+.vote-display {
+  padding: 3px;
+  margin-top: 2px;
+  color: red;
+}
+.post-votes{
+  font-size: 20px;
+  padding:3px;
+  color: rgb(156, 7, 7);
 }

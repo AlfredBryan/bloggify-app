@@ -31,3 +31,13 @@ span.input-group-addon i {
   font-size: 30px;
   font-weight: 600;
 }
+
+.register-bottom {
+  display: flex;
+}
+.btn-1 {
+ flex: 1;
+}
+.btn-2 {
+  flex: 5;
+}

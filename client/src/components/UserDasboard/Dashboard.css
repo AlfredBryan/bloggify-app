@@ -1,0 +1,31 @@
+.panel-heading {
+  padding: 10px 15px;
+  background-color: #353535;
+  border-top: 1px solid #ddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  position: absolute;
+  top: 0%;
+  cursor: pointer;
+  opacity: 0.8;
+  color: white;
+  border: none;
+}
+
+.panel-body {
+  padding: 60px 4% 5% 7%;
+}
+
+.box {
+  padding: 2%;
+  border: 1px #ddd solid;
+  cursor: pointer;
+}
+
+.remove-decoration {
+  text-decoration: none !important;
+  color: #333;
+  font-size: 12px;
+}
+
+
