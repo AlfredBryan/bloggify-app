@@ -6,7 +6,9 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   firstName: {
     type: String,
-    required: [true, "first_name is required"]
+    required: [true, "first_name is required"],
+    trim: true,
+    uppercase: true
   },
   lastName: {
     type: String,
@@ -29,7 +31,12 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: [true, "password is required"]
-  }
+  },
+  post: 
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Post"
+    },
 });
 
 UserSchema.plugin(uniqueValidator);

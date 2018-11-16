@@ -3,59 +3,65 @@ import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import superagent from "superagent";
 
-import Footer from "../Footer/Footer"
+import Footer from "../Footer/Footer";
 import "./Login.css";
 
 class Login extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-          usename: "",
-          password:"",
-          loading: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: "",
+      usename: "",
+      password: "",
+      loading: false
+    };
+  }
+
+  handleChange = e => {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  login = e => {
+    e.preventDefault();
+    superagent
+      .post("/api/users/login")
+      .send({
+        username: this.state.username,
+        password: this.state.password
+      })
+      .end((error, response) => {
+        console.log(response);
+        if (error) {
+          this.setState({ errorMessage: error });
+          alert("Error Signing Up");
+          return;
         }
-    }
-
-    handleChange = e => {
-        e.preventDefault()
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
-    login = e => {
-        e.preventDefault();
-        superagent
-          .post("/api/users/login")
-          .send({
-            username: this.state.username,
-            password: this.state.password
-          })
-          .end((error, response) => {
-            console.log(response);
-            if (error) {
-              this.setState({ errorMessage: error });
-              alert("Error Signing Up");
-              return;
-            }
-            if (response.ok) {
-              this.setState({ loading: true });
-              return;
-            }
-          });
-      };
+        if (response.ok) {
+          this.setState({userId: response.body.user._id})
+          this.setState({ loading: true });
+          
+          return;
+        }
+      });
+  };
 
   render() {
+    let id = this.state.userId;
     if (this.state.loading) {
-        return <Redirect to={"/userdashboard"} />;
-      }
+      return <Redirect to={`/user/${id}`} />;
+    }
+
+    console.log(this.state.userId);
 
     return (
       <div>
         <div class="container">
           <div class="row" style={{ marginTop: "20px" }}>
             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-              <form encType="multipart/form-data">
+              <form encType="multipart/form-data" onSubmit={this.login}>
                 <fieldset>
                   <h2>Please Sign In</h2>
                   <hr class="colorgraph" />
@@ -97,7 +103,10 @@ class Login extends Component {
                       />
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                      <Link to="/register" class="btn btn-lg btn-primary btn-block">
+                      <Link
+                        to="/register"
+                        class="btn btn-lg btn-primary btn-block"
+                      >
                         Register
                       </Link>
                     </div>
@@ -107,7 +116,7 @@ class Login extends Component {
             </div>
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </div>
     );
   }

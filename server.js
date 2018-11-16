@@ -1,22 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const multer = require("multer");
-const path = require("path");
+//const multer = require("multer");
+//const path = require("path");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+const logger = require("morgan");
 
 const config = require("./config");
 const userRoutes = require("./routes/UserRoutes");
 const PostRoutes = require("./routes/PostRoutes");
 
 // Set Storage Engine
-const storage = multer.diskStorage({
+/*const storage = multer.diskStorage({
   destination: "./public/uploads",
   filename: function(req, file, cb) {
+    const image = file.fieldname + "_" + Date.now() + path.extname(file.originalname)
     cb(
       null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+      image
     );
   }
 });
@@ -43,7 +45,7 @@ function checkFileType(file, cb) {
   } else {
     cb("Error: Images Only!");
   }
-}
+}*/
 
 // Mail Services
 const transport = {
@@ -66,6 +68,8 @@ transporter.verify((error, success) => {
 
 const app = express();
 
+app.use(logger("dev"));
+
 app.use(express.static("./public"));
 
 // Setting Headers
@@ -76,7 +80,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Upload route
-app.post("/upload", (req, res) => {
+/*app.post("/post", (req, res) => {
   upload(req, res, err => {
     if (err) {
       res.status(500).send(err);
@@ -85,19 +89,16 @@ app.post("/upload", (req, res) => {
       res.send("Success");
     }
   });
-});
+});*/
 
 // Mail routes
 app.post("/mail", (req, res) => {
-
   const mail = {
     from: req.body.name,
-    to: 'alfred.chimereze@gmail.com',
-    subject: 'Mail from Bloggify Contact',
-    text: req.body.name + '\n' +
-        req.body.email + '\n\n' +
-        req.body.message
-};
+    to: "alfred.chimereze@gmail.com",
+    subject: "Mail from Bloggify Contact",
+    text: req.body.name + "\n" + req.body.email + "\n\n" + req.body.message
+  };
 
   transporter.sendMail(mail, (error, data) => {
     if (error) {
@@ -111,8 +112,6 @@ app.post("/mail", (req, res) => {
     }
   });
 });
-
-
 
 // Adding the routes
 app.use("/api", userRoutes);
@@ -129,7 +128,7 @@ mongoose.connect(
 );
 
 // Setting the port
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 6000;
 
 // Starting the server
 app.listen(port, () => {

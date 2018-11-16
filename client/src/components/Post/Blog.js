@@ -14,6 +14,7 @@ class Blog extends Component {
       author: "",
       title: "",
       post: "",
+      newImage: "",
       loading: false
     };
   }
@@ -25,9 +26,12 @@ class Blog extends Component {
       .send({
         author: this.state.author,
         title: this.state.title,
-        post: this.state.post
+        post: this.state.post,
+        newImage: this.state.newImage
       })
       .end((error, response) => {
+        console.log(response.body)
+        console.log(error)
         if (response.ok) {
           this.setState({ loading: true });
         } else {
@@ -42,10 +46,10 @@ class Blog extends Component {
   };
 
   render() {
-    if (this.state.loading) {
+   {/* if (this.state.loading) {
       return <Redirect to={"/"} />;
-    }
-
+    }*/}
+console.log(this.state.newImage)
     return (
       <div>
         <Helmet>
@@ -75,6 +79,14 @@ class Blog extends Component {
               name="title"
               placeholder="Enter title.."
               value={this.state.title}
+              onChange={this.handleChange}
+            />
+            <label for="title">Image</label>
+            <input
+              type="file"
+              id="newImage"
+              name="newImage"
+              value={this.state.newImage}
               onChange={this.handleChange}
             />
 

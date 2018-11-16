@@ -11,7 +11,6 @@ router.get("/users", (req, res) => {
   res.send("Get Post");
 });
 
-
 router.get("/user/:id", (req, res) => {
   User.findOne({ _id: req.params.id }).then(user => {
     res.send(user);

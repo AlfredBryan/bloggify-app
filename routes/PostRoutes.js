@@ -1,8 +1,46 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
+
 const router = express.Router();
 
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+
+let newFile
+// Set Storage Engine
+const storage = multer.diskStorage({
+  destination: "../public/uploads",
+  filename: function(req, file, cb) {
+    newFile =
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname);
+    cb(null, newFile);
+  }
+});
+
+// Init upload
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 100000 },
+  fileFilter: function(req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).single("image");
+
+// Check file type
+function checkFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // check mime
+  const mimetype = filetypes.test(file.mimetype);
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
+}
 
 // Getting All Post
 router.get("/post", (req, res) => {
@@ -17,11 +55,24 @@ router.get("/post", (req, res) => {
 
 // Adding a New Post
 router.post("/post", (req, res) => {
+  console.log(req.body);
+  if (req.file) {
+    upload(req, res, err => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log(req.file);
+        res.send("Success");
+      }
+    });
+  }
+  console.log(req.body);
   Post.create(
     {
       author: req.body.author,
       title: req.body.title,
       post: req.body.post,
+      newImage: newFile,
       likes_count: req.body.likes_count
     },
     (err, post) => {
@@ -63,12 +114,12 @@ router.post("/post/:id", (req, res) => {
 // Adding or Removing A Like to A single Post
 router.post("/post/:id/like", (req, res) => {
   Post.findOne({ _id: req.params.id }).then(post => {
-    if (req.body.like_type == "increment"){
-      post.likes_count += 1
-    } 
-    if (req.body.like_type == "decrement"){
-      post.likes_count -= 1
-    } 
+    if (req.body.like_type == "increment") {
+      post.likes_count += 1;
+    }
+    if (req.body.like_type == "decrement") {
+      post.likes_count -= 1;
+    }
     post.save((error, post) => {
       if (error) return res.send(error);
       res.send(post);

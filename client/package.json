@@ -11,9 +11,11 @@
     "react-password-mask": "^3.3.1",
     "react-password-strength": "^2.3.1",
     "react-password-strength-indicator": "^1.0.0",
+    "react-reload-component": "^1.2.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.5",
     "react-ux-password-field": "^0.9.12",
+    "reload": "^2.3.1",
     "superagent": "^4.0.0-beta.5"
   },
   "scripts": {
@@ -31,5 +33,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:4000"
+  "proxy": "http://localhost:6000"
 }
