@@ -2,29 +2,35 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment/moment.js";
 import superagent from "superagent";
-import { Helmet }  from "react-helmet";
+import { Helmet } from "react-helmet";
+import { connect } from "react-redux";
+
+import { fetchPost } from "../../actions/postActions";
+import Footer from "../Footer/Footer";
+import Spinner from "../../hoc/spinner/Spinner"
+
 import "./Home.css";
 
-import Footer from "../Footer/Footer";
+
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [],
-      postId: this.props.match.params.id,
-      Like: "",
-      Unlike: "",
       name: "",
       email: "",
       message: ""
     };
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     fetch("/api/post")
       .then(res => res.json())
       .then(posts => this.setState({ posts }, () => console.log(posts)));
+  }*/
+
+  componentDidMount() {
+    this.props.dispatch(fetchPost());
   }
 
   sendMail = e => {
@@ -54,6 +60,28 @@ class Home extends Component {
   };
 
   render() {
+    const { posts, loading, error , comments} = this.props;
+    console.log(posts);
+    console.log(comments)
+
+    if (error) {
+      return (
+        <div className="errorcode">
+          <div className="error">{error.message}</div>
+        </div>
+      );
+    }
+
+    if (loading) {
+      return (
+        <div className="spinner">
+          <div className="spinner-display">
+            <Spinner/>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div>
         <Helmet>
@@ -62,7 +90,7 @@ class Home extends Component {
         <div className="container">
           <div className="row">
             <div className="leftcolumn">
-              {this.state.posts.map(post => (
+              {posts.map(post => (
                 <div className="card" key={post._id}>
                   <h2 className="title">{post.title}</h2>
                   <h5>
@@ -74,25 +102,22 @@ class Home extends Component {
                   <p className="author">{post.author}</p>
                   <p className="post">{post.post}</p>
                   <div className="bottom-line">
-                  <div className="read">
-                    <p>
-                      <Link to={`/post/${post._id}`}>
-                        <button className="btn-success">
-                          <b>READ MORE »</b>
-                        </button>
-                      </Link>
-                    </p>
-                  </div>
+                    <div className="read">
+                      <p>
+                        <Link to={`/post/${post._id}`}>
+                          <button className="btn-success">
+                            <b>READ MORE »</b>
+                          </button>
+                        </Link>
+                      </p>
+                    </div>
                     <div className="vote-area">
                       <div className="post-votes">
-                      <span class="glyphicon glyphicon-heart"
-                      ></span></div>
-                      <div className="vote-display">
-                        {post.likes_count}
+                        <span class="glyphicon glyphicon-heart" />
                       </div>
+                      <div className="vote-display">{post.likes_count}</div>
                     </div>
                   </div>
-
                 </div>
               ))}
             </div>
@@ -122,7 +147,7 @@ class Home extends Component {
                 <div className="fakeimg">Image</div>
               </div>
               <div className="card">
-                <form onSubmit={this.sendMail}>
+                <form onSubmit={this.handleSubmit}>
                   <label for="name">Name</label>
                   <input
                     type="text"
@@ -169,4 +194,10 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+  posts: state.posts.posts,
+  loading: state.posts.loading,
+  error: state.posts.error
+});
+
+export default connect(mapStateToProps)(Home);

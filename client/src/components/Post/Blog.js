@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import superagent from "superagent";
 import { Redirect } from "react-router-dom";
-import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet";
+import { connect } from "react-redux";
 
 import Footer from "../Footer/Footer";
+import { addPost } from "../../actions/postActions";
 
 import "./Blog.css";
 
@@ -14,15 +16,14 @@ class Blog extends Component {
       author: "",
       title: "",
       post: "",
-      newImage: "",
-      loading: false
+      newImage: ""
     };
   }
 
-  addPost = e => {
+  /* addPost = e => {
     e.preventDefault();
     superagent
-      .post("/api/post")
+      .post("http://localhost:4000/api/post/add")
       .send({
         author: this.state.author,
         title: this.state.title,
@@ -30,14 +31,20 @@ class Blog extends Component {
         newImage: this.state.newImage
       })
       .end((error, response) => {
-        console.log(response.body)
-        console.log(error)
+        console.log(response.body);
+        console.log(error);
         if (response.ok) {
           this.setState({ loading: true });
         } else {
           return null;
         }
       });
+  };*/
+
+  handleSubmit = e => {
+    e.preventDefault();
+    let { author, title, post } = this.state;
+    this.props.dispatch(addPost({ author, title, post }));
   };
 
   handleChange = e => {
@@ -46,10 +53,11 @@ class Blog extends Component {
   };
 
   render() {
-   {/* if (this.state.loading) {
+    {
+      /* if (this.state.loading) {
       return <Redirect to={"/"} />;
-    }*/}
-console.log(this.state.newImage)
+    }*/
+    }
     return (
       <div>
         <Helmet>
@@ -59,7 +67,7 @@ console.log(this.state.newImage)
           <h3>Post</h3>
           <form
             action="post"
-            onSubmit={this.addPost}
+            onSubmit={this.handleSubmit}
             encType="multipart/form-data"
           >
             <label for="author">Author</label>
@@ -109,4 +117,9 @@ console.log(this.state.newImage)
   }
 }
 
-export default Blog;
+const mapStateToProps = state => ({
+  loading: state.posts.loading,
+  error: state.posts.error
+});
+
+export default connect(mapStateToProps)(Blog);

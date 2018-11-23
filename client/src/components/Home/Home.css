@@ -20,6 +20,21 @@ body {
   width: 100%;
   padding: 20px;
 }
+.error {
+  display: inline-block;
+  font-size: 40px;
+  font-family: 'Unna', serif;
+}
+.errorcode {
+  text-align: center;
+}
+
+.spinner{
+  text-align: center;
+}
+.spinner-display {
+  display: inline-block;
+}
 
 .card {
   background-color: white;
@@ -39,7 +54,6 @@ body {
     width: 100%;
     padding: 0;
   }
-  
 }
 .author {
   font-family: "Great Vibes", cursive;
@@ -68,8 +82,8 @@ body {
   margin-top: 2px;
   color: red;
 }
-.post-votes{
+.post-votes {
   font-size: 20px;
-  padding:3px;
+  padding: 3px;
   color: rgb(156, 7, 7);
 }

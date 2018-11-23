@@ -7,7 +7,7 @@ const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
-let newFile
+let newFile;
 // Set Storage Engine
 const storage = multer.diskStorage({
   destination: "../public/uploads",
@@ -25,7 +25,7 @@ const upload = multer({
   fileFilter: function(req, file, cb) {
     checkFileType(file, cb);
   }
-}).single("image");
+}).single("newFile");
 
 // Check file type
 function checkFileType(file, cb) {
@@ -54,19 +54,7 @@ router.get("/post", (req, res) => {
 });
 
 // Adding a New Post
-router.post("/post", (req, res) => {
-  console.log(req.body);
-  if (req.file) {
-    upload(req, res, err => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        console.log(req.file);
-        res.send("Success");
-      }
-    });
-  }
-  console.log(req.body);
+router.post("/post/add", (req, res) => {
   Post.create(
     {
       author: req.body.author,
@@ -95,7 +83,7 @@ router.get("/post/:id", (req, res, next) => {
 });
 
 // Adding A New Comment to A single Post
-router.post("/post/:id", (req, res) => {
+router.post("/post/:id/comment", (req, res) => {
   Post.findOne({ _id: req.params.id }).then(post => {
     let comment = new Comment({
       comment: req.body.comment
@@ -127,25 +115,19 @@ router.post("/post/:id/like", (req, res) => {
   });
 });
 
-// Getting a Single Post
+// Getting a  Post
 router.get("/post/:id", (req, res, next) => {
   Post.findOne({ _id: req.params.id }).then(post => {
     res.send(post);
   });
 });
 
-router.post("/posts/:id/act", (req, res) => {
-  const action = req.body.action;
-  const counter = action === "Like" ? 1 : -1;
-  Post.update(
-    { _id: req.params.id },
-    { $inc: { likes_counter: counter } },
-    {},
-    (err, numberAffected) => {
-      pusher.trigger();
-      res.send("");
-    }
-  );
+//Deleting a post
+router.delete("/users/delete/:id", (req, res) => {
+  Post.findOneAndRemove(req.params.id, err => {
+    if (err) return next(err);
+    res.send("Deleted successfully!");
+  });
 });
 
 router.get("/comment/:id", (req, res) => {

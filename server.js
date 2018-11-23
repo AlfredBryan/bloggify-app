@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const logger = require("morgan");
+const http = require("http");
 
 const config = require("./config");
 const userRoutes = require("./routes/UserRoutes");
@@ -128,9 +129,8 @@ mongoose.connect(
 );
 
 // Setting the port
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 4000;
 
-// Starting the server
 app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+  console.log(`listening to port ${port}`);
 });

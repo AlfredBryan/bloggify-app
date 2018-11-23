@@ -21,7 +21,8 @@ const PostSchema = new Schema(
       trim: true
     },
     newImage: {
-      type: String
+      data: Buffer,
+      contentType: String
     },
     likes_count: {
       type: Number,
@@ -40,5 +41,7 @@ const PostSchema = new Schema(
 );
 
 const Post = mongoose.model("Post", PostSchema);
+
+Post.aggregate([{ $count: "comments" }]);
 
 module.exports = Post;
