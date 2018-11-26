@@ -20,9 +20,10 @@ const PostSchema = new Schema(
       required: [true, "enter post field"],
       trim: true
     },
-    newImage: {
-      data: Buffer,
-      contentType: String
+    image: {
+      type: String,
+      required: [true],
+      trim: true
     },
     likes_count: {
       type: Number,

@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import superagent from "superagent";
-import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 
@@ -16,36 +14,21 @@ class Blog extends Component {
       author: "",
       title: "",
       post: "",
-      newImage: ""
+      image: ""
     };
   }
 
-  /* addPost = e => {
-    e.preventDefault();
-    superagent
-      .post("http://localhost:4000/api/post/add")
-      .send({
-        author: this.state.author,
-        title: this.state.title,
-        post: this.state.post,
-        newImage: this.state.newImage
-      })
-      .end((error, response) => {
-        console.log(response.body);
-        console.log(error);
-        if (response.ok) {
-          this.setState({ loading: true });
-        } else {
-          return null;
-        }
-      });
-  };*/
-
   handleSubmit = e => {
     e.preventDefault();
-    let { author, title, post } = this.state;
-    this.props.dispatch(addPost({ author, title, post }));
+    const data = this.state;
+    this.props.dispatch(addPost(data));
   };
+
+  handleImageChange = e => {
+    e.preventDefault();
+    let imageFile = e.target.files[0];
+    this.setState({ [e.target.name]: imageFile });
+  }
 
   handleChange = e => {
     e.preventDefault();
@@ -53,11 +36,6 @@ class Blog extends Component {
   };
 
   render() {
-    {
-      /* if (this.state.loading) {
-      return <Redirect to={"/"} />;
-    }*/
-    }
     return (
       <div>
         <Helmet>
@@ -68,7 +46,7 @@ class Blog extends Component {
           <form
             action="post"
             onSubmit={this.handleSubmit}
-            encType="multipart/form-data"
+            enctype="multipart/form-data"
           >
             <label for="author">Author</label>
             <input
@@ -92,10 +70,9 @@ class Blog extends Component {
             <label for="title">Image</label>
             <input
               type="file"
-              id="newImage"
-              name="newImage"
-              value={this.state.newImage}
-              onChange={this.handleChange}
+              id="image"
+              name="image"
+              onChange={this.handleImageChange}
             />
 
             <label for="post">Post</label>

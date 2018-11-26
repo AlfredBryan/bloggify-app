@@ -85,11 +85,21 @@ export const addPostFailure = error => ({
   payload: { error }
 });
 
-export function addPost({ author, title, post }) {
+export function addPost({ image, title, post, author }) {
   return dispatch => {
     dispatch(addPostBegin());
-    axios
-      .post(`${apiUrl}/add`, { author, title, post })
+    const formData = new FormData();
+    formData.set('title', title);
+    formData.set('post', post);
+    formData.set('author', author);
+    formData.append('image', image);
+    console.log(image);
+    axios({
+      method: 'post',
+      url: `${apiUrl}/add`,
+      data: formData,
+      config: { headers: { 'Content-Type': 'multipart/form-data' } }
+    })
       .then(response => {
         dispatch(addPostSuccess(response.data));
       })

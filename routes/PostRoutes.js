@@ -7,14 +7,11 @@ const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
-let newFile;
 // Set Storage Engine
 const storage = multer.diskStorage({
-  destination: "../public/uploads",
-  filename: function(req, file, cb) {
-    newFile =
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname);
-    cb(null, newFile);
+  destination: "../public/uploads/",
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
   }
 });
 
@@ -22,18 +19,15 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: { fileSize: 100000 },
-  fileFilter: function(req, file, cb) {
+  fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
-}).single("newFile");
+}).single("image");
 
 // Check file type
 function checkFileType(file, cb) {
-  // Allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // check mime
   const mimetype = filetypes.test(file.mimetype);
   if (mimetype && extname) {
     return cb(null, true);
@@ -54,18 +48,19 @@ router.get("/post", (req, res) => {
 });
 
 // Adding a New Post
-router.post("/post/add", (req, res) => {
-  Post.create(
-    {
-      author: req.body.author,
-      title: req.body.title,
-      post: req.body.post,
-      newImage: newFile,
-      likes_count: req.body.likes_count
-    },
+router.post("/post/add", upload, (req, res) => {
+  console.log(req);
+  Post.create({
+    author: req.body.author,
+    title: req.body.title,
+    post: req.body.post,
+    image: req.protocol + "://" + req.host + '/' + req.file.path
+  },
     (err, post) => {
-      if (err) return res.status(505).send(err);
-
+      if (err) {
+        console.log(err)
+        return res.status(500).send(err)
+      };
       res.status(200).send(post);
     }
   );
