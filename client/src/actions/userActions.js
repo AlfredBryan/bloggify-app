@@ -75,7 +75,7 @@ export function signUp({
   return dispatch => {
     dispatch(addUserBegin());
     const formData = new FormData();
-    formData.set("firtName", firstName);
+    formData.set("firstName", firstName);
     formData.set("lastName", lastName);
     formData.set("username", username);
     formData.set("email", email);
@@ -87,7 +87,6 @@ export function signUp({
       method: "post",
       url: `${apiUrl}/signup`,
       data: formData,
-      Accept: "application/json",
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {

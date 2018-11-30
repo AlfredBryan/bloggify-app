@@ -44,7 +44,7 @@ router.post("/user/signup", upload, (req, res) => {
       password: hashPassword
     },
     (err, user) => {
-      if (err) return res.status(409).send({ message: "signup error" });
+      if (err) return res.status(409).send({ message: err.message });
       console.log(user);
       //create token
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

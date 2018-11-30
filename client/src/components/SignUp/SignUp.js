@@ -77,11 +77,7 @@ class SignUp extends Component {
           <div className="error">{error.message}</div>
         </div>
       );
-    }
-
-    if (loading) {
-      return <Redirect to={"/signin"} />;
-    }
+    } 
     return (
       <div>
         <Helmet>
