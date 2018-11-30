@@ -96,9 +96,7 @@ class Home extends Component {
                   <h5>
                     {moment(post.date).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </h5>
-                  <div className="fakeimg" style={{ height: "200px" }}>
-                    Image
-                  </div>
+                  <img src={post.image} style={{height:"300px"}} className="fakeimg" alt="post-img"/>
                   <p className="author">{post.author}</p>
                   <p className="post">{post.post}</p>
                   <div className="bottom-line">

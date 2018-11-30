@@ -1,25 +1,44 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+require("dotenv").config();
 
 const router = express.Router();
 
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+const storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "posts",
+  allowedFormats: ["jpg", "png"],
+  transformation: [{ width: 500, height: 500, crop: "limit" }]
+});
+
+const parser = multer({ storage: storage }).single("image");
+
 // Set Storage Engine
-const storage = multer.diskStorage({
-  destination: "../public/uploads/",
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
+/*const storage = multer.diskStorage({
+  destination: "client/src/uploads",
+  filename: function(req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
   }
 });
 
 // Init upload
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 100000 },
-  fileFilter: function (req, file, cb) {
+  limits: { fileSize: 1000000 },
+  fileFilter: function(req, file, cb) {
     checkFileType(file, cb);
   }
 }).single("image");
@@ -35,7 +54,7 @@ function checkFileType(file, cb) {
     cb("Error: Images Only!");
   }
 }
-
+*/
 // Getting All Post
 router.get("/post", (req, res) => {
   Post.find({}, (err, posts) => {
@@ -48,19 +67,20 @@ router.get("/post", (req, res) => {
 });
 
 // Adding a New Post
-router.post("/post/add", upload, (req, res) => {
-  console.log(req);
-  Post.create({
-    author: req.body.author,
-    title: req.body.title,
-    post: req.body.post,
-    image: req.protocol + "://" + req.host + '/' + req.file.path
-  },
+router.post("/post/add", parser, (req, res) => {
+  console.log(req.file);
+  Post.create(
+    {
+      author: req.body.author,
+      title: req.body.title,
+      post: req.body.post,
+      image: req.file.url
+    },
     (err, post) => {
       if (err) {
-        console.log(err)
-        return res.status(500).send(err)
-      };
+        console.log(err);
+        return res.status(500).send(err);
+      }
       res.status(200).send(post);
     }
   );

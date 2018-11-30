@@ -28,15 +28,21 @@ const UserSchema = new Schema({
     type: Number,
     unique: [true, "email already exists"]
   },
+  image: {
+    type: String,
+    required: [true],
+    trim: true
+  },
   password: {
     type: String,
     required: [true, "password is required"]
   },
-  post: 
+  posts: [
     {
       type: Schema.Types.ObjectId,
       ref: "Post"
-    },
+    }
+  ]
 });
 
 UserSchema.plugin(uniqueValidator);

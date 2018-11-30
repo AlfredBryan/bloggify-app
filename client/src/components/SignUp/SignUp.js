@@ -4,9 +4,12 @@ import PasswordMask from "react-password-mask";
 import { Helmet } from "react-helmet";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
 import "./SignUp.css";
 
 import Footer from "../Footer/Footer";
+import { signUp } from "../../actions/userActions";
 
 class SignUp extends Component {
   constructor(props) {
@@ -18,8 +21,7 @@ class SignUp extends Component {
       email: "",
       number: "",
       password: "",
-      loading: false,
-      errorMessage: ""
+      image: ""
     };
   }
 
@@ -28,7 +30,19 @@ class SignUp extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  signUp = e => {
+  handleImageChange = e => {
+    e.preventDefault();
+    let imageFile = e.target.files[0];
+    this.setState({ [e.target.name]: imageFile });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const data = this.state;
+    this.props.dispatch(signUp(data));
+  };
+
+  /*signUp = e => {
     e.preventDefault();
     superagent
       .post("/api/users/signup")
@@ -52,10 +66,20 @@ class SignUp extends Component {
           return;
         }
       });
-  };
+  };*/
 
   render() {
-    if (this.state.loading) {
+    let { loading, error } = this.props;
+
+    if (error) {
+      return (
+        <div className="errorcode">
+          <div className="error">{error.message}</div>
+        </div>
+      );
+    }
+
+    if (loading) {
       return <Redirect to={"/signin"} />;
     }
     return (
@@ -67,7 +91,11 @@ class SignUp extends Component {
           <div className="main">
             <div className="main-center">
               <h5>Sign up once and read blogs as well as post</h5>
-              <form className="" encType="multipart/form-data">
+              <form
+                action="post"
+                onSubmit={this.handleSubmit}
+                encType="multipart/form-data"
+              >
                 <div className="form-group">
                   <label htmlFor="name">First Name</label>
                   <div className="input-group">
@@ -154,9 +182,27 @@ class SignUp extends Component {
                     />
                   </div>
                 </div>
+                <div className="form-group">
+                  <label htmlFor="image">Profile Picture</label>
+                  <div className="">
+                    <span className="input-group-addon">
+                      <i
+                        className="glyphicon glyphicon-picture"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="image"
+                      name="image"
+                      onChange={this.handleImageChange}
+                    />
+                  </div>
+                </div>
 
                 <div className="form-group">
-                  <label htmlFor="confirm">Password</label>
+                  <label htmlFor="password">Password</label>
                   <div className="input-group">
                     <span className="input-group-addon">
                       <i className="fa fa-lock fa-lg" aria-hidden="true" />
@@ -173,22 +219,15 @@ class SignUp extends Component {
                 </div>
                 <div className="register-bottom">
                   <div className="btn-2">
-                    <button
-                      type="submit"
-                      onClick={this.signUp}
-                      className="signup"
-                    >
+                    <button type="submit" className="signup">
                       SUBMIT
                     </button>
                   </div>
-                   <div className="btn-1">
-                   <Link to="/signin">
-                    <button  className="btn-success">
-                      LOGIN
-                    </button>
-                  </Link>
-                   </div>
-
+                  <div className="btn-1">
+                    <Link to="/signin">
+                      <button className="btn-success">LOGIN</button>
+                    </Link>
+                  </div>
                 </div>
               </form>
             </div>
@@ -200,4 +239,9 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = state => ({
+  loading: state.users.loading,
+  error: state.users.error
+});
+
+export default connect(mapStateToProps)(SignUp);

@@ -16,20 +16,21 @@ body {
   padding-left: 20px;
 }
 .fakeimg {
-  background-color: #aaa;
   width: 100%;
   padding: 20px;
+  height: inherit;
+  border: 2px solid grey;
 }
 .error {
   display: inline-block;
   font-size: 40px;
-  font-family: 'Unna', serif;
+  font-family: "Unna", serif;
 }
 .errorcode {
   text-align: center;
 }
 
-.spinner{
+.spinner {
   text-align: center;
 }
 .spinner-display {
@@ -56,7 +57,7 @@ body {
   }
 }
 .author {
-  font-family: "Great Vibes", cursive;
+  font-family: "Ranga", cursive;
   font-weight: 700;
 }
 .post {

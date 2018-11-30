@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import Footer from "../Footer/Footer";
 import { addPost } from "../../actions/postActions";
+
 
 import "./Blog.css";
 
@@ -36,6 +38,12 @@ class Blog extends Component {
   };
 
   render() {
+    const { loading } = this.props
+
+    if (loading) {
+      return(<Redirect to="/" />)
+      
+    }
     return (
       <div>
         <Helmet>
@@ -46,7 +54,7 @@ class Blog extends Component {
           <form
             action="post"
             onSubmit={this.handleSubmit}
-            enctype="multipart/form-data"
+            encType="multipart/form-data"
           >
             <label for="author">Author</label>
             <input

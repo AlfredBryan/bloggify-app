@@ -89,16 +89,16 @@ export function addPost({ image, title, post, author }) {
   return dispatch => {
     dispatch(addPostBegin());
     const formData = new FormData();
-    formData.set('title', title);
-    formData.set('post', post);
-    formData.set('author', author);
-    formData.append('image', image);
+    formData.set("title", title);
+    formData.set("post", post);
+    formData.set("author", author);
+    formData.append("image", image);
     console.log(image);
     axios({
-      method: 'post',
+      method: "post",
       url: `${apiUrl}/add`,
       data: formData,
-      config: { headers: { 'Content-Type': 'multipart/form-data' } }
+      config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(response => {
         dispatch(addPostSuccess(response.data));

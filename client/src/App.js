@@ -6,9 +6,10 @@ import Home from "./components/Home/Home";
 import SinglePost from "./components/Blog/SinglePost";
 import Blog from "./components/Post/Blog";
 import SignUp from "./components/SignUp/SignUp";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {  BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from "./components/UserDasboard/Dashboard";
 import Login from "./components/UserLogin/Login";
+import { PrivateRoute } from "./hoc/PrivateRoute";
 
 class App extends Component {
   render() {

@@ -11,7 +11,6 @@ import {
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE
 } from "../actions/types";
-import { stat } from "fs";
 
 const initialState = {
   posts: [],
@@ -25,7 +24,7 @@ const initialState = {
   error: null
 };
 
-export default function postReducer(state = initialState, action) {
+export default function posts(state = initialState, action) {
   switch (action.type) {
     case FETCH_POST_BEGIN:
       return {
@@ -45,8 +44,7 @@ export default function postReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
-        posts: []
+        error: action.payload.error
       };
     case FETCH_SINGLE_POST_BEGIN:
       return {
@@ -101,7 +99,7 @@ export default function postReducer(state = initialState, action) {
     case ADD_POST_FAILURE:
       return {
         ...state,
-        loading: true,
+        loading: false,
         error: action.payload.error
       };
 

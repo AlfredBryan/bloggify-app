@@ -1,14 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-//const multer = require("multer");
-//const path = require("path");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const logger = require("morgan");
-const http = require("http");
+require('dotenv').config()
 
-const config = require("./config");
 const userRoutes = require("./routes/UserRoutes");
 const PostRoutes = require("./routes/PostRoutes");
 
@@ -52,8 +49,8 @@ function checkFileType(file, cb) {
 const transport = {
   host: "smtp.gmail.com",
   auth: {
-    user: config.USER,
-    pass: config.PASSWORD
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD
   }
 };
 
@@ -71,14 +68,12 @@ const app = express();
 
 app.use(logger("dev"));
 
-app.use(express.static("./public"));
-
 // Setting Headers
 app.use(cors());
 
 // Adding the body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Upload route
 /*app.post("/post", (req, res) => {
@@ -121,7 +116,7 @@ app.use("/api", PostRoutes);
 // Connecting to Database
 mongoose.set("useCreateIndex", true);
 mongoose.connect(
-  config.url,
+  process.env.DB_URL,
   { useNewUrlParser: true },
   () => {
     console.log("Connected to MongoDB");
