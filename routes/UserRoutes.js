@@ -68,13 +68,14 @@ router.post("/user/login", (req, res) => {
     if (!passwordIsValid)
       return res.status(403).send({ message: "login invalid" });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 1500
+      expiresIn: 86400  // expires in 24 hours
     });
-    res.status(200).send({
-      token: token,
-      message: "login successful",
-      user: user
+    res.json({
+      user: user,
+      message: "Authenticated",
+      token: token
     });
+    console.log(token);
   });
 });
 
@@ -103,6 +104,23 @@ router.get("/user/:id", (req, res, next) => {
     });
 });
 
+// Adding A New Post by  A User
+router.post("/user/:id/post", (req, res) => {
+  User.findOne({ _id: req.params.id }).then(user => {
+    let user = new Post({
+      posts: req.body.posts
+    });
+    user.posts.push(post);
+    post.save(error => {
+      if (error) return res.send(error);
+    });
+    user.save((error, user) => {
+      if (error) return res.send(error);
+      res.send(user);
+    });
+  });
+});
+
 // GET /logout
 router.get("/logout", function(req, res, next) {
   if (req.session) {
@@ -113,6 +131,37 @@ router.get("/logout", function(req, res, next) {
       } else {
         return res.redirect("/");
       }
+    });
+  }
+});
+
+// route middleware to verify a token
+router.use(function(req, res, next) {
+  // check header or url parameters or post parameters for token
+  var token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+
+  // decode token
+  if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+      if (err) {
+        return res.json({
+          success: false,
+          message: "Failed to authenticate token."
+        });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    // if there is no token
+    // return an error
+    return res.status(403).send({
+      success: false,
+      message: "No token provided."
     });
   }
 });

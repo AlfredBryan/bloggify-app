@@ -4,7 +4,8 @@ import {
   ADD_USER_FAILURE,
   USER_LOGIN_BEGIN,
   USER_LOGIN_SUCCESS,
-  USER_LOGIN_FAILURE
+  USER_LOGIN_FAILURE,
+  LOGGED_IN
 } from "../actions/types";
 
 const initialState = {
@@ -15,6 +16,8 @@ const initialState = {
   number: "",
   password: "",
   image: "",
+  userId: "",
+  user: "",
   loading: false,
   error: null
 };
@@ -56,6 +59,7 @@ export default function users(state = initialState, action) {
         ...state,
         username: action.payload.username,
         password: action.payload.password,
+        userId: action.payload.userId,
         loading: false,
         error: null
       };
@@ -64,6 +68,11 @@ export default function users(state = initialState, action) {
         ...state,
         loading: false,
         error: action.payload.error
+      };
+    case LOGGED_IN:
+      return {
+        ...state,
+        user: action.payload.user
       };
     default:
       return state;

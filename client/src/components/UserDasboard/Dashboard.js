@@ -1,44 +1,47 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
+import { fetchUser } from "../../actions/userActions";
 import "./Dashboard.css";
 
 class Dashboard extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            userId: this.props.match.params.id,
-            user: ""
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: this.props.match.params.id,
+      user: ""
+    };
+  }
 
-    componentDidMount() {
+  componentDidMount() {
+    let id = this.state.userId;
+    this.props.dispatch(fetchUser(id));
+  }
+
+  static getDerivedStateFromProps(props, prevState) {
+    if (props.match.params.id !== prevState.userId) {
+      return {
+        userId: props.match.params.id
+      };
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.userId !== this.state.userId) {
       this.fetchUser(this.state.userId);
     }
+  }
 
-    static getDerivedStateFromProps(props, prevState) {
-        if (props.match.params.id !== prevState.userId) {
-          return {
-            userId: props.match.params.id
-          };
-        }
-        return null;
-      }
-    
-      componentDidUpdate(prevProps, prevState) {
-        if (prevState.userId !== this.state.userId) {
-          this.fetchPost(this.state.userId);
-        }
-      }
-    
-      fetchUser(id) {
+  /*fetchUser(id) {
         fetch(`/api/user/${id}`)
           .then(res => res.json())
           .then(user => this.setState({ user: user }));
-      }  
+      }  */
 
   render() {
-    console.log(this.state.user)
-    const user = this.state.user
+    const { user } = this.props;
+    console.log(user);
     return (
       <div>
         <div class="container-fluid">
@@ -56,16 +59,20 @@ class Dashboard extends Component {
                       <div class="col-md-12 ">
                         <center>
                           <a class="" href="#">
-                            <div
+                            <img
+                              src={user.image}
+                              alt="profile-img"
                               class="media-object dp img-circle"
-                              style={{width: "180px",height:"180px", backgroundColor:"black"}}
+                              style={{
+                                width: "180px",
+                                height: "180px"
+                              }}
                             />
                           </a>
                         </center>
                       </div>
                       <div class="col-md-12">
                         <h2>{user.firstName}</h2>
-                        <p>Software Developer at ceymplon</p>
                         <p>
                           <a href="#" class="remove-decoration">
                             <i class="glyphicon glyphicon-envelope" />{" "}
@@ -75,7 +82,7 @@ class Dashboard extends Component {
                           <a href="#" class="remove-decoration">
                             {" "}
                             <i class="glyphicon glyphicon-phone" />
-                             {user.number}
+                            {user.number}
                           </a>
                         </p>
                       </div>
@@ -86,10 +93,68 @@ class Dashboard extends Component {
               <div class="col-md-4" />
             </div>
           </div>
+          <ul class="navbars color1">
+            <li class="drpdown">
+              <a href="#">
+                <i class="icon20 comments" />
+                <span>Posts</span>
+              </a>
+              <ul class="drpcontent">
+                <li>
+                  <a href="#">Latest Posts</a>
+                </li>
+                <li>
+                  <a href="#">Private Posts</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">
+                <i class="icon20 login" />
+                <span>Update</span>
+              </a>
+            </li>
+            <li class="drpdown">
+              <a href="#">
+                <i class="icon20 theme" />
+                <span>Themeselector</span>
+              </a>
+              <ul class="drpcontent" id="themeselect">
+                <li>
+                  <a href="#" data-color="color1">
+                    Orange
+                  </a>
+                </li>
+                <li>
+                  <a href="#" data-color="color2">
+                    Marine
+                  </a>
+                </li>
+                <li>
+                  <a href="#" data-color="color3">
+                    Green
+                  </a>
+                </li>
+                <li>
+                  <a href="#" data-color="color4">
+                    Purple
+                  </a>
+                </li>
+                <li>
+                  <a href="#" data-color="color5">
+                    Red
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
     );
   }
 }
+const mapStateToProps = state => ({
+  user: state.users.user
+});
 
-export default Dashboard;
+export default connect(mapStateToProps)(Dashboard);

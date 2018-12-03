@@ -4,7 +4,8 @@ import {
   ADD_USER_FAILURE,
   USER_LOGIN_BEGIN,
   USER_LOGIN_SUCCESS,
-  USER_LOGIN_FAILURE
+  USER_LOGIN_FAILURE,
+  LOGGED_IN
 } from "./types";
 import axios from "axios";
 
@@ -39,7 +40,8 @@ export const userLoginSuccess = data => ({
   type: USER_LOGIN_SUCCESS,
   payload: {
     username: data.username,
-    password: data.password
+    password: data.password,
+    userId: data.user._id
   }
 });
 
@@ -48,14 +50,35 @@ export const userLoginFailure = error => ({
   payload: { error }
 });
 
+export const loggedIn = id => ({
+  type: LOGGED_IN,
+  payload: {
+    user: id
+  }
+});
+
+export function fetchUser(id) {
+  return dispatch => {
+    axios
+      .get(`${apiUrl}/${id}`)
+      .then(response => {
+        dispatch(loggedIn(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+}
+
 export function userLogin({ username, password }) {
   return dispatch => {
     dispatch(userLoginBegin());
     axios
       .post(`${apiUrl}/login`, { username, password })
       .then(response => {
+        localStorage.setItem("token", response.data.token);
         dispatch(userLoginSuccess(response.data));
-        localStorage.setItem("user", response.data.token);
+        console.log(response.data.token);
       })
       .catch(error => {
         dispatch(userLoginFailure(error));

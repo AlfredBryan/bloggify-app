@@ -2,48 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const logger = require("morgan");
-require('dotenv').config()
+require("dotenv").config();
 
 const userRoutes = require("./routes/UserRoutes");
 const PostRoutes = require("./routes/PostRoutes");
-
-// Set Storage Engine
-/*const storage = multer.diskStorage({
-  destination: "./public/uploads",
-  filename: function(req, file, cb) {
-    const image = file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    cb(
-      null,
-      image
-    );
-  }
-});
-
-// Init upload
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 100000 },
-  fileFilter: function(req, file, cb) {
-    checkFileType(file, cb);
-  }
-}).single("image");
-
-// Check file type
-function checkFileType(file, cb) {
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // check mime
-  const mimetype = filetypes.test(file.mimetype);
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
-}*/
 
 // Mail Services
 const transport = {
@@ -75,18 +40,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Upload route
-/*app.post("/post", (req, res) => {
-  upload(req, res, err => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      console.log(req.file);
-      res.send("Success");
-    }
-  });
-});*/
-
 // Mail routes
 app.post("/mail", (req, res) => {
   const mail = {
@@ -112,6 +65,26 @@ app.post("/mail", (req, res) => {
 // Adding the routes
 app.use("/api", userRoutes);
 app.use("/api", PostRoutes);
+
+app.use(function(req, res, next) {
+  // check header or url parameters or post parameters for token
+  var token = req.headers["authorization"];
+  if (!token) return next(); //if no token, continue
+
+  token = token.replace("Bearer ", "");
+
+  jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: "Please register Log in using a valid email to submit posts"
+      });
+    } else {
+      req.user = user; //set the user to req so other routes can use it
+      next();
+    }
+  });
+});
 
 // Connecting to Database
 mongoose.set("useCreateIndex", true);

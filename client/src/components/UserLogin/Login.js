@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import superagent from "superagent";
+import { connect } from "react-redux";
 
 import Footer from "../Footer/Footer";
+import { userLogin } from "../../actions/userActions";
 import "./Login.css";
 
 class Login extends Component {
@@ -11,7 +13,7 @@ class Login extends Component {
     super(props);
     this.state = {
       userId: "",
-      usename: "",
+      username: "",
       password: "",
       loading: false
     };
@@ -24,7 +26,13 @@ class Login extends Component {
     });
   };
 
-  login = e => {
+  handleSubmit = e => {
+    let { username, password } = this.state;
+    e.preventDefault();
+    this.props.dispatch(userLogin({ username, password }));
+  };
+
+  /*login = e => {
     e.preventDefault();
     superagent
       .post("/api/users/login")
@@ -46,22 +54,24 @@ class Login extends Component {
           return;
         }
       });
-  };
+  };*/
 
   render() {
-    let id = this.state.userId;
-    if (this.state.loading) {
+    let { userId, loading, error } = this.props;
+    console.log(userId);
+    console.log(loading);
+
+    let id = userId;
+    if (loading) {
       return <Redirect to={`/user/${id}`} />;
     }
-
-    console.log(this.state.userId);
 
     return (
       <div>
         <div class="container">
           <div class="row" style={{ marginTop: "20px" }}>
             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-              <form encType="multipart/form-data" onSubmit={this.login}>
+              <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
                 <fieldset>
                   <h2>Please Sign In</h2>
                   <hr class="colorgraph" />
@@ -99,7 +109,6 @@ class Login extends Component {
                         type="submit"
                         class="btn btn-lg btn-success btn-block"
                         value="Sign In"
-                        onClick={this.login}
                       />
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
@@ -122,4 +131,10 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  userId: state.users.userId,
+  loading: state.users.loading,
+  error: state.users.error
+});
+
+export default connect(mapStateToProps)(Login);
