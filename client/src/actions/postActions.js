@@ -60,7 +60,7 @@ export const addNewComment = data => {
     type: ADD_NEW_COMMENT,
     payload: {
       _id: data._id,
-      comment: data.comment
+      comments: data.comments
     }
   };
 };

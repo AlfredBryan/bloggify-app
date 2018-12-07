@@ -34,8 +34,9 @@ class SinglePost extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    let id = this.state.postId;
-    let comment = this.state.comment;
+    const id = this.state.postId;
+    const comment = this.state.comment;
+    this.setState({ comment: "" });
     this.props.dispatch(addComment(id, { comment }));
   };
 
@@ -135,7 +136,7 @@ class SinglePost extends Component {
                     className="facebook"
                   />
                 </div>
-                <form encType="multipart/form-data">
+                <form>
                   <textarea
                     minlenght="10"
                     autoComplete="off"
@@ -178,7 +179,7 @@ class SinglePost extends Component {
                     <i style={{ fontize: "18px" }} /> POST
                   </button>
                 </form>
-                {comments.map(comment => (
+                {comments && comments.map(comment => (
                   <ul id="commenttext" key={comment._id}>
                     <li id="commentbubble">
                       <div className="comment-style" />

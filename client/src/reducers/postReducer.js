@@ -76,10 +76,11 @@ export default function posts(state = initialState, action) {
       };
 
     case ADD_NEW_COMMENT:
+      console.log(action.payload)
       return {
         ...state,
         loading: false,
-        comment: action.payload.comment
+        comments: action.payload.comments
       };
     case ADD_POST_BEGIN:
       return {
