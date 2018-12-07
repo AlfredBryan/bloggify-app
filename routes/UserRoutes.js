@@ -63,12 +63,11 @@ router.post("/user/login", (req, res) => {
     const passwordIsValid = bcrypt.compareSync(
       req.body.password,
       user.password,
-      console.log(user)
     );
     if (!passwordIsValid)
       return res.status(403).send({ message: "login invalid" });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 86400  // expires in 24 hours
+      expiresIn: 86400 // expires in 24 hours
     });
     res.json({
       user: user,
@@ -94,7 +93,7 @@ router.put("/user/update/:id", (req, res, next) => {
 });
 
 // Getting a single User with the Posts
-router.get("/user/:id", (req, res, next) => {
+router.get("/user/:id/posts", (req, res, next) => {
   User.findById({ _id: req.params.id })
     .populate({ path: "posts", model: Post })
     .exec((err, user) => {
@@ -104,22 +103,32 @@ router.get("/user/:id", (req, res, next) => {
     });
 });
 
-// Adding A New Post by  A User
-router.post("/user/:id/post", (req, res) => {
-  User.findOne({ _id: req.params.id }).then(user => {
-    let user = new Post({
-      posts: req.body.posts
-    });
-    user.posts.push(post);
-    post.save(error => {
-      if (error) return res.send(error);
-    });
-    user.save((error, user) => {
-      if (error) return res.send(error);
-      res.send(user);
-    });
+
+/*router.get("/me/from/token", (req, res) => {
+  const token = req.body.token || req.query.token;
+  if (!token) {
+    return res.status(401).json({ message: "Must pass token" });
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) throw err;
+
+    User.findById(
+      {
+        _id: user._id
+      },
+      (err, user) => {
+        if (err) throw err;
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+        res.json({
+          user: user,
+          token: token
+        });
+      }
+    );
   });
-});
+});*/
 
 // GET /logout
 router.get("/logout", function(req, res, next) {
@@ -136,7 +145,7 @@ router.get("/logout", function(req, res, next) {
 });
 
 // route middleware to verify a token
-router.use(function(req, res, next) {
+/*router.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
   var token =
     req.body.token || req.query.token || req.headers["x-access-token"];
@@ -164,6 +173,6 @@ router.use(function(req, res, next) {
       message: "No token provided."
     });
   }
-});
+});*/
 
 module.exports = router;

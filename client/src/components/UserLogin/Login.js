@@ -62,7 +62,7 @@ class Login extends Component {
     console.log(loading);
 
     let id = userId;
-    if (loading) {
+   if (loading) {
       return <Redirect to={`/user/${id}`} />;
     }
 

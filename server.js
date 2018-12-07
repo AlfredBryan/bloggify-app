@@ -63,10 +63,7 @@ app.post("/mail", (req, res) => {
 });
 
 // Adding the routes
-app.use("/api", userRoutes);
-app.use("/api", PostRoutes);
-
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
   var token = req.headers["authorization"];
   if (!token) return next(); //if no token, continue
@@ -84,7 +81,10 @@ app.use(function(req, res, next) {
       next();
     }
   });
-});
+});*/
+
+app.use("/api", userRoutes);
+app.use("/api", PostRoutes);
 
 // Connecting to Database
 mongoose.set("useCreateIndex", true);

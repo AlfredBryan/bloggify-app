@@ -12,21 +12,26 @@ const UserSchema = new Schema({
   },
   lastName: {
     type: String,
-    required: [true, "last_name is required"]
+    required: [true, "last_name is required"],
+    trim: true,
+    uppercase: true
   },
   username: {
     type: String,
     required: [true, "username is required"],
-    unique: [true, "username has been taken"]
+    unique: [true, "username has been taken"],
+    trim: true
   },
   email: {
     type: String,
     required: [true, "email is required"],
-    unique: [true, "email already exists"]
+    unique: [true, "email already exists"],
+    trim: true
   },
   number: {
     type: Number,
-    unique: [true, "email already exists"]
+    unique: [true, "email already exists"],
+    trim: true
   },
   image: {
     type: String,
@@ -35,7 +40,8 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "password is required"]
+    required: [true, "password is required"],
+    trim: true
   },
   posts: [
     {
